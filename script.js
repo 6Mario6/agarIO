@@ -50,7 +50,7 @@ $(document).on("ready",function(){
 		$("#plataforma div").on("mousemove",hacer);
 	});
 
-	function hacer(){
+function hacer(){
 		eliminado=$(this);
 		var $div1=$("#"+$(txtMen).val());
 
@@ -67,9 +67,9 @@ $(document).on("ready",function(){
 		var b2= y2+h2;
 		var r2= x2+w2;
 		if(b1<y2 || y1>b2||r1<x2||x1>r2){return false};
-		$("#"+$(txtMen).val()).css("height","+=1");
-		$("#"+$(txtMen).val()).css("width","+=1");
-		$(eliminado).remove();
+		$("#"+$(txtMen).val()).css("height","+=3");
+		$("#"+$(txtMen).val()).css("width","+=3");
+	$(eliminado).remove();
 		var obj={
 			eli:$(eliminado).text(),
 			sum:"#"+$(txtMen).val()+"-",
@@ -117,8 +117,9 @@ $(document).on("ready",function(){
 			jugador:$(txtMen).val(),
 			x:event.pageX,
 			y:event.pageY,
-			h:parseInt($("#"+$(txtMen).val()).css("height")),
-			w:parseInt($("#"+$(txtMen).val()).css("width")),
+			//h:parseInt($("#"+$(txtMen).val()).css("height","+=1")),
+			//w:parseInt($("#"+$(txtMen).val()).css("width","+=1"))
+
 		}
 		$("#"+$(txtMen).val()).css("left",event.pageX);
 		$("#"+$(txtMen).val()).css("top",event.pageY);
@@ -132,5 +133,32 @@ $(document).on("ready",function(){
 			width:data.w
 		}
 		$("#"+data.jugador).css(move);
+		$("body.player").on("mousemove",chocar);
+	});
+	function chocar(){
+		var el_eliminado;
+		var $enemigo=(this);
+		var $typoe=$enemigo.attr("type");
+		var $namee=$enemigo.attr("name");
+		var $anchoe=parseInt($enemigo.css("width"));
+		var $altoe=parseInt($enemigo.css("height"));
+		var $jugador=$("#"+$(txtMen).val());
+		var $typoj=$jugador.attr("type");
+		var $namej=$enemigo.attr("name");
+		var $anchoj=parseInt($enemigo.css("width"));
+		var $altoj=parseInt($enemigo.css("height"));
+		if($typoe=="player" && $namee!==$jugador.text()){
+			if( $anchoe< $anchoj &&  $altoe < $altoj){
+				el_eliminado=$enemigo;
+			}else{
+				el_eliminado=$jugador;
+			}
+			$(el_eliminado).remove();
+			socket.emit("jugadoreliminado",$(el_eliminado.text()));
+		}
+		
+	}
+	socket.on("eliminarJugador",function(data){
+		$("#"+data).remove();
 	});
 });

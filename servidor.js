@@ -24,5 +24,8 @@ io.sockets.on("connection",function(socket){
 	socket.on("posicionar",function(data){
 		io.sockets.emit("posicionado",data);
 	});
+	socket.on("jugadoreliminado",function(data){
+		io.sockets.emit("eliminarJugador",data);
+	});
 
 });
